@@ -1,0 +1,30 @@
+{
+  "name": "serverless-vs-sam",
+  "version": "1.0.0",
+  "description": "This repository contains both a [Serverless](https://www.serverless.com) and a [SAM](https://github.com/awslabs/serverless-application-model) infrastructure template for generating the following infrastructure:",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "test",
+    "deploy": "sls deploy",
+    "dev": "sls offline start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huihe/serverless-vs-sam.git"
+  },
+  "author": "Hui He",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huihe/serverless-vs-sam/issues"
+  },
+  "homepage": "https://github.com/huihe/serverless-vs-sam#readme",
+  "devDependencies": {
+    "serverless": "^1.30.0"
+  },
+  "peerDependencies": {
+    "aws-sdk": "^2.293.0"
+  }
+}

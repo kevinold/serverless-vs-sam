@@ -1,0 +1,92 @@
+service: sls-vs-sam
+
+custom:
+  s3BucketName: ${self:provider.stackName}-bucket
+  snsEmailAddress: ${env:SNS_EMAIL}
+
+package:
+  excludeDevDependencies: true
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: ap-southeast-1
+  versionFunctions: true
+  stackName: ${self:service}-${self:provider.stage}
+  memorySize: 512
+  timeout: 10
+  environment:
+    S3BucketName: ${self:custom.s3BucketName}
+    DynamoDBTableName:
+      Ref: DynamoDBTable
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:ListBucket
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeStream
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:ListStreams
+      Resource:
+        Fn::GetAtt: [DynamoDBTable, StreamArn]
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource:
+        Fn::Sub: "arn:aws:s3:::${self:custom.s3BucketName}/*"
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Scan
+      Resource:
+        Fn::GetAtt: [DynamoDBTable, Arn]
+    - Effect: Allow
+      Action:
+        - dynamodb:ListTables
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource:
+        Ref: SNSTopic
+
+functions:
+  putItem:
+    handler: src/put-dynamodb/index.handler
+    events:
+      - http:
+          path: /items/{id}
+          method: PUT
+  listItems:
+    handler: src/list-dynamodb/index.handler
+    events:
+      - http:
+          path: /items
+          method: GET
+  generateImage:
+    handler: src/generate-image/index.handler
+    events:
+      - stream:
+          type: dynamodb
+          batchSize: 10
+          startingPosition: TRIM_HORIZON
+          arn:
+            Fn::GetAtt: [DynamoDBTable, StreamArn]
+  publishSns:
+    handler: src/publish-sns/index.handler
+    environment:
+      SNSTopicARN:
+        Ref: SNSTopic
+    events:
+      - s3:
+          bucket: ${self:custom.s3BucketName}
+          event: s3:ObjectCreated:*
+
+resources:
+  Description: "Serverless vs Sam - REAio31 - HH"
+  Resources: ${file(resources.yml)}
