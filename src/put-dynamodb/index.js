@@ -6,18 +6,14 @@ exports.handler = async event => {
   const params = {
     TableName: process.env.DynamoDBTableName,
     Item: {
-      id: {
-        S: event.pathParameters["id"]
-      },
-      status: {
-        S: "New"
-      }
+      id: event.pathParameters["id"],
+      name: "test"
     }
   };
 
-  const res = await dynamodb.put(params).promise();
+  const data = await dynamodb.put(params).promise();
   return {
     statusCode: 200,
-    body: "ok"
+    body: data
   };
 };
