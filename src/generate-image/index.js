@@ -7,7 +7,8 @@ exports.handler = (event, context, callback) => {
   event.Records.forEach(function(record) {
     if (record.eventName == "INSERT") {
       console.log(record);
-      const id = record.dynamodb.NewImage.id.N;
+      const id = record.dynamodb.NewImage.id;
+      console.log(id);
 
       gm(200, 30, "#fff")
         .drawText(10, 20, "Id number: " + id)
@@ -33,7 +34,7 @@ exports.handler = (event, context, callback) => {
               params.Item.status.S = "Failed";
             }
 
-            dynamodb.putItem(params, function(err, data) {
+            dynamodb.put(params, function(err, data) {
               let response = {
                 statusCode: err ? 500 : 200,
                 body: err ? err.stack : ""

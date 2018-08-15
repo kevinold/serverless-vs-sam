@@ -6,9 +6,11 @@
 
 ## Infrastructure
 
-![Serverless S3 upload architecture](./doc/architecture.png)
+![Serverless S3 upload architecture](./doc/REAio31.png)
 
 ## Deploy
 
+```sh
 export SNS_EMAIL=youremail@here
-rea-as saml locke-dev-Developer npm run deploy
+yarn deploy
+```
