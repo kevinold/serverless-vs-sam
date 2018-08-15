@@ -14,6 +14,6 @@ exports.handler = async event => {
   const data = await dynamodb.put(params).promise();
   return {
     statusCode: 200,
-    body: data
+    body: JSON.stringify({ data })
   };
 };
