@@ -7,7 +7,7 @@ exports.handler = async event => {
     TableName: process.env.DynamoDBTableName,
     Item: {
       id: event.pathParameters["id"],
-      name: "test"
+      status: "New"
     }
   };
 
