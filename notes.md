@@ -9,6 +9,10 @@ Move resources to separate file
 SNS_EMAIL=hehuic@gmail.com rea-as saml locke-dev-Developer npm run deploy
 ```
 
+## tips
+
+https://cloudcraft.co/
+
 ## Errors
 
 Could not locate deployment bucket. Error: The specified bucket does not exist
@@ -19,3 +23,12 @@ Could not locate deployment bucket. Error: The specified bucket does not exist
 Update table schema got below error, rename the tablenane will create new table, but DELETE old table
 
 > An error occurred: DynamoDBTable - CloudFormation cannot update a stack when a custom-named resource requires replacing. Rename sls-vs-sam-dev-images and update the stack again..
+
+```js
+return {
+  statusCode: 200,
+  body: data
+};
+```
+
+failed with internal server error, but no log in lambda cloudwatch
