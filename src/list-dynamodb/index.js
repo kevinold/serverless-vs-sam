@@ -1,16 +1,10 @@
 const aws = require("aws-sdk");
-const dynamodb = new aws.DynamoDB();
+const dynamodb = new aws.DynamoDB.DocumentClient();
 
-exports.handler = (event, context, callback) => {
+exports.handler = event => {
   const params = {
     TableName: process.env.DynamoDBTableName
   };
 
-  dynamodb.listTables({}, function(err, data) {
-    const response = {
-      statusCode: err ? 500 : 200,
-      body: err ? err.stack : ""
-    };
-    callback(null, response);
-  });
+  return dynamodb.scan(params).promise();
 };

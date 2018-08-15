@@ -11,7 +11,7 @@ DynamoDBTable:
     TableName: ${self:provider.stackName}-images
     AttributeDefinitions:
       - AttributeName: id
-        AttributeType: N
+        AttributeType: S
     KeySchema:
       - AttributeName: id
         KeyType: HASH

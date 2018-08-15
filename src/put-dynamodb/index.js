@@ -1,12 +1,13 @@
 const aws = require("aws-sdk");
-const dynamodb = new aws.DynamoDB().DocumentClient();
+const dynamodb = new aws.DynamoDB.DocumentClient();
 
-exports.handler = event => {
+exports.handler = async event => {
+  console.log(event);
   const params = {
     TableName: process.env.DynamoDBTableName,
     Item: {
       id: {
-        N: event.pathParameters["id"]
+        S: event.pathParameters["id"]
       },
       status: {
         S: "New"
@@ -14,5 +15,9 @@ exports.handler = event => {
     }
   };
 
-  return dynamodb.putItem(params).promise();
+  const res = await dynamodb.put(params).promise();
+  return {
+    statusCode: 200,
+    body: "ok"
+  };
 };
