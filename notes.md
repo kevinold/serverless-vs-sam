@@ -40,5 +40,9 @@ sam auto generate roles for each function
 sam can use !ref !sub in cloudformation
 sam deploy file name is uuid while sls has data time stamp
 sam one lambda one source file while sls default use one source file for multi lambdas, but can be config to sam way.
+  sam package based on CodeUri: value
 sam during deploy, no outputs, just `Waiting for stack create/update to complete`
-sam create log auto, not in cloudformation.
+sam create log auto, not in cloudformation. not auto, based on policy under function
+
+after package,
+aws cloudformation deploy --template-file /Users/hui.he/projects/hackday/31/serverless-vs-sam/package.yml --stack-name sls-vs-sam-sam

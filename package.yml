@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Serverless vs Sam - sam - HH
 Parameters:
+  BucketName:
+    Default: sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt
+    Type: String
+  CodeKey:
+    Default: serverless/sls-vs-sam/dev/1534403687911-2018-08-16T07:14:47.911Z/sls-vs-sam.zip
+    Type: String
   SNSEmailAddress:
     Default: hehuic@gmail.com
     Type: String
@@ -23,7 +29,11 @@ Resources:
     Type: AWS::DynamoDB::Table
   GenerateImageFunction:
     Properties:
-      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      CodeUri:
+        Bucket:
+          Ref: BucketName
+        Key:
+          Ref: CodeKey
       Environment:
         Variables:
           DynamoDBTableName:
@@ -40,7 +50,7 @@ Resources:
               - DynamoDBTable
               - StreamArn
           Type: DynamoDB
-      Handler: generate-image/index.handler
+      Handler: src/generate-image/index.handler
       Policies:
       - Statement:
         - Action:
@@ -60,7 +70,11 @@ Resources:
     Type: AWS::Serverless::Function
   ListDynamoDBFunction:
     Properties:
-      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      CodeUri:
+        Bucket:
+          Ref: BucketName
+        Key:
+          Ref: CodeKey
       Environment:
         Variables:
           DynamoDBTableName:
@@ -71,7 +85,7 @@ Resources:
             Method: GET
             Path: /items
           Type: Api
-      Handler: list-dynamodb/index.handler
+      Handler: src/list-dynamodb/index.handler
       Policies:
       - Statement:
         - Action:
@@ -86,7 +100,11 @@ Resources:
     Type: AWS::Serverless::Function
   PublishSNSFunction:
     Properties:
-      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      CodeUri:
+        Bucket:
+          Ref: BucketName
+        Key:
+          Ref: CodeKey
       Environment:
         Variables:
           SNSTopicARN:
@@ -98,7 +116,7 @@ Resources:
               Ref: S3Bucket
             Events: s3:ObjectCreated:*
           Type: S3
-      Handler: publish-sns/index.handler
+      Handler: src/publish-sns/index.handler
       Policies:
       - Statement:
         - Action:
@@ -111,7 +129,11 @@ Resources:
     Type: AWS::Serverless::Function
   PutDynamoDBFunction:
     Properties:
-      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      CodeUri:
+        Bucket:
+          Ref: BucketName
+        Key:
+          Ref: CodeKey
       Environment:
         Variables:
           DynamoDBTableName:
@@ -122,7 +144,7 @@ Resources:
             Method: PUT
             Path: /items/{id}
           Type: Api
-      Handler: put-dynamodb/index.handler
+      Handler: src/put-dynamodb/index.handler
       Policies:
       - Statement:
         - Action:

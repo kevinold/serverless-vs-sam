@@ -6,6 +6,12 @@ Parameters:
   SNSEmailAddress:
     Type: String
     Default: hehuic@gmail.com
+  BucketName:
+    Type: String
+    Default: sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt
+  CodeKey:
+    Type: String
+    Default: 'serverless/sls-vs-sam/dev/1534403687911-2018-08-16T07:14:47.911Z/sls-vs-sam.zip'
 
 Resources:
   DynamoDBTable:
@@ -27,8 +33,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs8.10
-      Handler: generate-image/index.handler
-      CodeUri: ./src/
+      Handler: src/generate-image/index.handler
+      CodeUri:
+        Bucket: !Ref BucketName
+        Key: !Ref CodeKey
       Environment:
         Variables:
           S3BucketName: !Ref "S3Bucket"
@@ -55,8 +63,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs8.10
-      Handler: list-dynamodb/index.handler
-      CodeUri: ./src/
+      Handler: src/list-dynamodb/index.handler
+      CodeUri:
+        Bucket: !Ref BucketName
+        Key: !Ref CodeKey
       Environment:
         Variables:
           DynamoDBTableName: !Ref "DynamoDBTable"
@@ -77,8 +87,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs8.10
-      Handler: publish-sns/index.handler
-      CodeUri: ./src/
+      Handler: src/publish-sns/index.handler
+      CodeUri:
+        Bucket: !Ref BucketName
+        Key: !Ref CodeKey
       Environment:
         Variables:
           SNSTopicARN: !Ref "SNSTopic"
@@ -99,8 +111,10 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs8.10
-      Handler: put-dynamodb/index.handler
-      CodeUri: ./src/
+      Handler: src/put-dynamodb/index.handler
+      CodeUri:
+        Bucket: !Ref BucketName
+        Key: !Ref CodeKey
       Environment:
         Variables:
           DynamoDBTableName: !Ref "DynamoDBTable"
