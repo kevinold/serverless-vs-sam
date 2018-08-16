@@ -7,7 +7,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "test": "echo test",
+    "test": "echo test & echo $SNS_EMAIL",
     "deploy": "sls deploy",
     "package": "sls package"
   },
