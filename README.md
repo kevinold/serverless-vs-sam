@@ -12,5 +12,5 @@
 
 ```sh
 export SNS_EMAIL=youremail@here
-yarn deploy
+./auto/deploy
 ```

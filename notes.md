@@ -6,7 +6,7 @@ Move resources to separate file
 ## deploy
 
 ```
-SNS_EMAIL=hehuic@gmail.com rea-as saml locke-dev-Developer npm run deploy
+SNS_EMAIL=hehuic@gmail.com rea-as saml locke-dev-Developer yarn deploy
 ```
 
 ## tips
