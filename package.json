@@ -7,9 +7,9 @@
     "doc": "doc"
   },
   "scripts": {
-    "test": "test",
+    "test": "echo test",
     "deploy": "sls deploy",
-    "dev": "sls offline start"
+    "package": "sls package"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -exo pipefail
+
+function die {
+  [ -n "${1}" ] && echo "${1}" >&2
+  exit 1
+}
+
+[ ${AWS_DEFAULT_REGION} ] || die "ERROR: AWS_DEFAULT_REGION environment variable not set"
+
+stack_name="locke-userpool-triggers"
+template_file="deployment/cloudformation.yml"
+version=${BUILDKITE_BUILD_NUMBER:-dev}
+
+docker-compose run --rm stackup \
+  ${stack_name} up \
+  --region ${AWS_DEFAULT_REGION} \
+  --template ${template_file} \
+  --tags deployment/tags.yml \
+  -o LambdaVersion=${version}

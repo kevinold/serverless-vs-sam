@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -exo pipefail
+
+cd $(dirname $0)/..
+
+trap "docker-compose rm -f -s -v ci" 0
+
+docker volume create external-yarn-cache
+docker-compose build ci
+docker-compose run --rm ci bash -c "$@" \
+	-e SNS_EMAIL=$SNS_EMAIL

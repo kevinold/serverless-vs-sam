@@ -1,0 +1,57 @@
+version: "3"
+
+services:
+  ci:
+    build: .
+    volumes:
+      - .:/app
+      - node-modules-ci:/app/node_modules
+      - yarn-cache-ci:/tmp/yarn-cache
+    working_dir: /app
+    environment:
+      YARN_CACHE_FOLDER: /tmp/yarn-cache
+      ? AWS_ACCESS_KEY_ID
+      ? AWS_SECRET_ACCESS_KEY
+      ? AWS_SESSION_TOKEN
+      ? SNS_EMAIL
+
+  dev:
+    image: node:8.10.0-alpine@sha256:a55d3e87802b2a8464b3bfc1f8c3c409f89e9b70a31f1dccce70bd146501f1a0
+    volumes:
+      - .:/app
+      - node-modules-dev:/app/node_modules
+      - yarn-cache-dev:/tmp/yarn-cache
+    working_dir: /app
+    environment:
+      yarn_cache_folder: /tmp/yarn-cache
+      NODE_ENV: development
+      TERM: xterm-256color
+      ? AWS_ACCESS_KEY_ID
+      ? AWS_SECRET_ACCESS_KEY
+      ? AWS_SESSION_TOKEN
+    command: sh -c "yarn install && sh -l"
+
+  aws:
+    image: mesosphere/aws-cli:1.14.5@sha256:fb590357c2cf74e868cf110ede38daf4bdf0ebd1bdf36c21d256aa33ab22fa6e
+    environment:
+      ? AWS_ACCESS_KEY_ID
+      ? AWS_SECRET_ACCESS_KEY
+      ? AWS_SESSION_TOKEN
+
+  stackup:
+    image: realestate/stackup:1.2.1@sha256:3d45c9fbc6215b6f6298eb161991c5a8915622e7d6e2ebba023395acba555721
+    environment:
+      ? AWS_ACCESS_KEY_ID
+      ? AWS_SECRET_ACCESS_KEY
+      ? AWS_SESSION_TOKEN
+    volumes:
+      - .:/app:ro
+    working_dir: /app
+
+volumes:
+  ? node-modules-ci
+  ? node-modules-dev
+  ? yarn-cache-dev
+  yarn-cache-ci:
+    external:
+      name: external-yarn-cache

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -exo pipefail
+
+cd $(dirname $0)/..
+
+auto/docker-compose-run "yarn install --no-progress --frozen-lockfile && yarn test"

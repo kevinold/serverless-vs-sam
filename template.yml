@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion : "2010-09-09"
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: A serverless stack using API Gateway, Lambda, DynamoDB, S3 and SNS
 
@@ -13,7 +13,7 @@ Resources:
     Properties:
       AttributeDefinitions:
         - AttributeName: id
-          AttributeType: N
+          AttributeType: S
       KeySchema:
         - AttributeName: id
           KeyType: HASH
@@ -40,8 +40,7 @@ Resources:
             StartingPosition: TRIM_HORIZON
             BatchSize: 10
       Policies:
-        -
-          Version: "2012-10-17"
+        - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action:
@@ -67,8 +66,7 @@ Resources:
             Path: /items
             Method: GET
       Policies:
-        -
-          Version: "2012-10-17"
+        - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action:
@@ -90,8 +88,7 @@ Resources:
             Bucket: !Ref "S3Bucket"
             Events: s3:ObjectCreated:*
       Policies:
-        -
-          Version: "2012-10-17"
+        - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action:
@@ -113,8 +110,7 @@ Resources:
             Path: /item/{id}
             Method: PUT
       Policies:
-        -
-          Version: "2012-10-17"
+        - Version: "2012-10-17"
           Statement:
             - Effect: Allow
               Action:

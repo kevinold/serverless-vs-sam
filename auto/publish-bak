@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -exo pipefail
+
+cd $( dirname $0 )/..
+
+function die {
+  [ -n "${1}" ] && echo "${1}" >&2
+  exit 1
+}
+
+[ ${AWS_ACCOUNT} ] || die "ERROR: AWS_ACCOUNT environment variable not set"
+[ $1 ] || die "ERROR: Shoud set region variable in the first position parameter"
+
+region=$1
+bucket_name=locke-lambda-deploy-${region}-${AWS_ACCOUNT}
+version=${BUILDKITE_BUILD_NUMBER:-dev}
+
+cat package/lambda.zip | docker-compose run --rm aws \
+s3 cp - s3://${bucket_name}/locke-userpool-triggers-${version}.zip
