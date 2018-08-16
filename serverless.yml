@@ -1,11 +1,12 @@
 service: sls-vs-sam
 
 custom:
-  s3BucketName: ${self:provider.stackName}-bucket
+  s3BucketName: ${self:provider.stackName}-images
   snsEmailAddress: ${env:SNS_EMAIL}
 
 package:
   excludeDevDependencies: true
+  individually: false
 
 provider:
   name: aws
@@ -88,7 +89,7 @@ functions:
           event: s3:ObjectCreated:*
 
 resources:
-  Description: "Serverless vs Sam - REAio31 - HH"
+  Description: "Serverless vs Sam - sls - HH"
   Resources:
     SNSTopic:
       Type: AWS::SNS::Topic

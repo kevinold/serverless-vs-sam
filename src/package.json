@@ -11,7 +11,7 @@
     "deploy": "sls deploy",
     "package": "sls package",
     "sam-package": "sam package --template-file template.yml --s3-bucket $s3bucket --output-template-file package.yml",
-    "sam-deploy": "sam deploy --template-file package.yml --stack-name sls-vs-sam-sam --capabilities CAPABILITY_IAM"
+    "sam-deploy": "yarn sam-package & sam deploy --template-file package.yml --stack-name sls-vs-sam-sam --capabilities CAPABILITY_IAM"
   },
   "repository": {
     "type": "git",

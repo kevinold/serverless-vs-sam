@@ -1,0 +1,150 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Serverless vs Sam - sam - HH
+Parameters:
+  SNSEmailAddress:
+    Default: hehuic@gmail.com
+    Type: String
+Resources:
+  DynamoDBTable:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+      TableName:
+        Fn::Sub: ${AWS::StackName}-images
+    Type: AWS::DynamoDB::Table
+  GenerateImageFunction:
+    Properties:
+      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      Environment:
+        Variables:
+          DynamoDBTableName:
+            Ref: DynamoDBTable
+          S3BucketName:
+            Ref: S3Bucket
+      Events:
+        DynamoDBInsert:
+          Properties:
+            BatchSize: 10
+            StartingPosition: TRIM_HORIZON
+            Stream:
+              Fn::GetAtt:
+              - DynamoDBTable
+              - StreamArn
+          Type: DynamoDB
+      Handler: generate-image/index.handler
+      Policies:
+      - Statement:
+        - Action:
+          - dynamodb:PutItem
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - DynamoDBTable
+            - Arn
+        - Action:
+          - s3:PutObject
+          Effect: Allow
+          Resource:
+            Fn::Sub: arn:aws:s3:::${S3Bucket}/*
+        Version: '2012-10-17'
+      Runtime: nodejs8.10
+    Type: AWS::Serverless::Function
+  ListDynamoDBFunction:
+    Properties:
+      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      Environment:
+        Variables:
+          DynamoDBTableName:
+            Ref: DynamoDBTable
+      Events:
+        GetApiEndpoint:
+          Properties:
+            Method: GET
+            Path: /items
+          Type: Api
+      Handler: list-dynamodb/index.handler
+      Policies:
+      - Statement:
+        - Action:
+          - dynamodb:Scan
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - DynamoDBTable
+            - Arn
+        Version: '2012-10-17'
+      Runtime: nodejs8.10
+    Type: AWS::Serverless::Function
+  PublishSNSFunction:
+    Properties:
+      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      Environment:
+        Variables:
+          SNSTopicARN:
+            Ref: SNSTopic
+      Events:
+        S3ObjectCreated:
+          Properties:
+            Bucket:
+              Ref: S3Bucket
+            Events: s3:ObjectCreated:*
+          Type: S3
+      Handler: publish-sns/index.handler
+      Policies:
+      - Statement:
+        - Action:
+          - sns:Publish
+          Effect: Allow
+          Resource:
+            Ref: SNSTopic
+        Version: '2012-10-17'
+      Runtime: nodejs8.10
+    Type: AWS::Serverless::Function
+  PutDynamoDBFunction:
+    Properties:
+      CodeUri: s3://sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt/2bf8463318f7c26700d682990d064e31
+      Environment:
+        Variables:
+          DynamoDBTableName:
+            Ref: DynamoDBTable
+      Events:
+        GetApiEndpoint:
+          Properties:
+            Method: PUT
+            Path: /items/{id}
+          Type: Api
+      Handler: put-dynamodb/index.handler
+      Policies:
+      - Statement:
+        - Action:
+          - dynamodb:PutItem
+          Effect: Allow
+          Resource:
+            Fn::GetAtt:
+            - DynamoDBTable
+            - Arn
+        Version: '2012-10-17'
+      Runtime: nodejs8.10
+    Type: AWS::Serverless::Function
+  S3Bucket:
+    Properties:
+      BucketName:
+        Fn::Sub: ${AWS::StackName}-images
+    Type: AWS::S3::Bucket
+  SNSTopic:
+    Properties:
+      Subscription:
+      - Endpoint:
+          Ref: SNSEmailAddress
+        Protocol: email
+    Type: AWS::SNS::Topic
+Transform: AWS::Serverless-2016-10-31

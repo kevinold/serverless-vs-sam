@@ -1,16 +1,17 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: A serverless stack using API Gateway, Lambda, DynamoDB, S3 and SNS
+Description: Serverless vs Sam - sam - HH
 
 Parameters:
   SNSEmailAddress:
     Type: String
-    Default: [your_email_address]
+    Default: hehuic@gmail.com
 
 Resources:
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: !Sub '${AWS::StackName}-images'
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
@@ -25,9 +26,9 @@ Resources:
   GenerateImageFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: nodejs6.10
-      Handler: index.handler
-      CodeUri: ./lambda/generate-image/
+      Runtime: nodejs8.10
+      Handler: generate-image/index.handler
+      CodeUri: ./src/
       Environment:
         Variables:
           S3BucketName: !Ref "S3Bucket"
@@ -53,9 +54,9 @@ Resources:
   ListDynamoDBFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: nodejs6.10
-      Handler: index.handler
-      CodeUri: ./lambda/list-dynamodb/
+      Runtime: nodejs8.10
+      Handler: list-dynamodb/index.handler
+      CodeUri: ./src/
       Environment:
         Variables:
           DynamoDBTableName: !Ref "DynamoDBTable"
@@ -75,9 +76,9 @@ Resources:
   PublishSNSFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: nodejs6.10
-      Handler: index.handler
-      CodeUri: ./lambda/publish-sns/
+      Runtime: nodejs8.10
+      Handler: publish-sns/index.handler
+      CodeUri: ./src/
       Environment:
         Variables:
           SNSTopicARN: !Ref "SNSTopic"
@@ -97,9 +98,9 @@ Resources:
   PutDynamoDBFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Runtime: nodejs6.10
-      Handler: index.handler
-      CodeUri: ./lambda/put-dynamodb/
+      Runtime: nodejs8.10
+      Handler: put-dynamodb/index.handler
+      CodeUri: ./src/
       Environment:
         Variables:
           DynamoDBTableName: !Ref "DynamoDBTable"
@@ -107,7 +108,7 @@ Resources:
         GetApiEndpoint:
           Type: Api
           Properties:
-            Path: /item/{id}
+            Path: /items/{id}
             Method: PUT
       Policies:
         - Version: "2012-10-17"
@@ -118,6 +119,8 @@ Resources:
               Resource: !GetAtt "DynamoDBTable.Arn"
   S3Bucket:
     Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${AWS::StackName}-images'
   SNSTopic:
     Type: AWS::SNS::Topic
     Properties:

@@ -4,6 +4,7 @@ const s3 = new aws.S3();
 const dynamodb = new aws.DynamoDB.DocumentClient();
 
 exports.handler = (event, context, callback) => {
+  console.log(event);
   event.Records.forEach(function(record) {
     if (record.eventName == "INSERT") {
       console.log(record);
