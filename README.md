@@ -27,8 +27,8 @@ export SNS_EMAIL=youremail@here
 - No outputs during deploy
 ```sh
 export s3bucket=yourDeployS3Bucket
-> sam package --template-file sam-template.yml --s3-bucket $s3bucket --output-template-file sam-output-template.yml
-> sam deploy --template-file sam-output-template.yml --stack-name sls-vs-sam-sam --capabilities CAPABILITY_IAM --region ap-southeast-1
+sam package --template-file sam-template.yml --s3-bucket $s3bucket --output-template-file sam-output-template.yml
+sam deploy --template-file sam-output-template.yml --stack-name sls-vs-sam-sam --capabilities CAPABILITY_IAM --region ap-southeast-1
 ```
 
 ### 3.Cloudformation
