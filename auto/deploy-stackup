@@ -7,15 +7,13 @@ function die {
   exit 1
 }
 
-[ ${AWS_DEFAULT_REGION} ] || die "ERROR: AWS_DEFAULT_REGION environment variable not set"
-
-stack_name="locke-userpool-triggers"
-template_file="deployment/cloudformation.yml"
-version=${BUILDKITE_BUILD_NUMBER:-dev}
+AWS_DEFAULT_REGION=ap-southeast-1
+stack_name="sls-vs-sam-stackup"
+template_file="sam-output-template.yml"
 
 docker-compose run --rm stackup \
   ${stack_name} up \
   --region ${AWS_DEFAULT_REGION} \
   --template ${template_file} \
-  --tags deployment/tags.yml \
-  -o LambdaVersion=${version}
+  --capabilities CAPABILITY_IAM
+

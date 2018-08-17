@@ -1,11 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
 Description: Serverless vs Sam - sam - HH
 Parameters:
   BucketName:
     Default: sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt
     Type: String
   CodeKey:
-    Default: serverless/sls-vs-sam/dev/1534403687911-2018-08-16T07:10:47.911Z/sls-vs-sam.zip
+    Default: 'serverless/sls-vs-sam/dev/1534403687911-2018-08-16T07:14:47.911Z/sls-vs-sam.zip'
     Type: String
   SNSEmailAddress:
     Default: hehuic@gmail.com
@@ -168,4 +169,4 @@ Resources:
           Ref: SNSEmailAddress
         Protocol: email
     Type: AWS::SNS::Topic
-Transform: AWS::Serverless-2016-10-31
+

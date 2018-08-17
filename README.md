@@ -41,3 +41,9 @@ aws cloudformation deploy --template-file sam-output-template.yml --stack-name s
 ```
 - update parameter value doesn't create new changeset, no changes to deploy.
 - update key value directly in CodeUri under function will deploy new code.
+
+### 4.Stackup
+https://github.com/realestate-com-au/stackup
+
+- ERROR: Unrecognised option '--capabilities'
+- ERROR: CreateStack cannot be used with templates containing Transforms.
