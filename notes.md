@@ -5,9 +5,21 @@ Move resources to separate file
 
 ## deploy
 
+sls
 ```
 SNS_EMAIL=hehuic@gmail.com rea-as saml locke-dev-Developer yarn deploy
 ```
+
+sam
+```
+rea-as saml locke-dev-Developer yarn sam-package
+rea-as saml locke-dev-Developer yarn sam-deploy --region ap-southeast-1
+
+```
+
+- use cloudformation with sam template but not sam cli
+
+> rea-as saml locke-dev-Developer aws cloudformation deploy --template-file sam-output-template.yml --stack-name sls-vs-sam-sam1 --region ap-southeast-1 --capabilities CAPABILITY_IAM
 
 ## tips
 
@@ -45,4 +57,4 @@ sam during deploy, no outputs, just `Waiting for stack create/update to complete
 sam create log auto, not in cloudformation. not auto, based on policy under function
 
 after package,
-aws cloudformation deploy --template-file /Users/hui.he/projects/hackday/31/serverless-vs-sam/package.yml --stack-name sls-vs-sam-sam
+rea-as saml locke-dev-Developer aws cloudformation deploy --template-file sam-output-template.yml --stack-name sls-vs-sam-sam --region ap-southeast-1 --capabilities CAPABILITY_IAM

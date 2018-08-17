@@ -11,7 +11,7 @@ Parameters:
     Default: sls-vs-sam-dev-serverlessdeploymentbucket-1sv3s216g9uxt
   CodeKey:
     Type: String
-    Default: 'serverless/sls-vs-sam/dev/1534403687911-2018-08-16T07:14:47.911Z/sls-vs-sam.zip'
+    Default: 'serverless/sls-vs-sam/dev/1534403404087-2018-08-16T07:10:04.087Z/sls-vs-sam.zip'
 
 Resources:
   DynamoDBTable:

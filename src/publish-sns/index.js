@@ -12,7 +12,7 @@ exports.handler = (event, context, callback) => {
       const id = key.substring(6, dotIndex);
 
       const params = {
-        Message: `The image with ID '${id}' was succesfully generated`,
+        Message: `The image with ID '${id}' was succesfully generated.`,
         TopicArn: process.env.SNSTopicARN
       };
 
